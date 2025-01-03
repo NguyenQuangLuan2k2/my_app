@@ -1,23 +1,17 @@
-atabases:
-  - name: mysite
-    databaseName: mysite
-    user: mysite
-    plan: free
-
+# Exported from Render on 2025-01-03T15:20:57Z
 services:
-  - type: web
-    name: mysite
-    runtime: ruby
-    plan: free
-    buildCommand: "./bin/render-build.sh"
-    # preDeployCommand: "bundle exec rails db:migrate" # preDeployCommand only available on paid instance types
-    startCommand: "bundle exec rails server"
-    envVars:
-      - key: DATABASE_URL
-        fromDatabase:
-          name: mysite
-          property: connectionString
-      - key: RAILS_MASTER_KEY
-        sync: false
-      - key: WEB_CONCURRENCY
-        value: 2 # sensible default
+- type: web
+  name: my_app
+  runtime: ruby
+  repo: https://github.com/NguyenQuangLuan2k2/my_app
+  plan: free
+  envVars:
+  - key: RAILS_MASTER_KEY
+    sync: false
+  - key: WEB_CONCURRENCY
+    sync: false
+  region: singapore
+  buildCommand: bundle install; bundle exec rake assets:precompile; bundle exec rake
+    assets:clean;
+  startCommand: bundle exec puma -t 5:5 -p ${PORT:-3000} -e ${RACK_ENV:-development}
+version: "1"
